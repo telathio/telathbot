@@ -7,9 +7,10 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-nextcord = "^2.0.0-alpha.6"
 SQLAlchemy = "^1.4.29"
 fastapi = "^0.71.0"
+discord-webhook = "^0.14.0"
+fastapi-plugins = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

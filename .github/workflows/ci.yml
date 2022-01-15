@@ -20,8 +20,8 @@ jobs:
         poetry install
     - name: Linting
       run: |
-        poetry run mypy --install-types --non-interactive app
-        poetry run pylint app
+        poetry run mypy --install-types --non-interactive telathbot
+        poetry run pylint telathbot
     - name: Run tests
       run: |
         poetry run pytest
