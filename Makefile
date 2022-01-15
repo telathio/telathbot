@@ -5,46 +5,40 @@ PROJECT_NAME = telathbot
 #-----------------------------------------------------------------------
 # Rules of Rules : Grouped rules that _doathing_
 #-----------------------------------------------------------------------
-test: lint pytest specification-test
-
-precommit: clean generate-requirements
+test: lint pytest
 
 build: clean build-package upload
-
-build-local: clean build-package
-
-#-----------------------------------------------------------------------
-# Install
-#-----------------------------------------------------------------------
-
-install:
-	pip install -U -r requirements.txt && \
-	python setup.py install
 
 #-----------------------------------------------------------------------
 # Testing & Linting
 #-----------------------------------------------------------------------
+
 lint:
-	pylint ${PROJECT_NAME} && \
-	mypy ${PROJECT_NAME} --install-types --non-interactive;
+	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH;
+	mypy --install-types --non-interactive ${PROJECT_NAME};
+	pylint ${PROJECT_NAME};
 
 pytest:
-	export PYTHONPATH="${ROOT_DIR}:$$PYTHONPATH" && \
-	py.test tests/unit_tests
-
-tox:
-	tox --parallel auto
+	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH && \
+	py.test tests
 
 #-----------------------------------------------------------------------
-# Rules
+# Run Rules
 #-----------------------------------------------------------------------
-clean:
-	rm -rf build; \
-	rm -rf dist; \
-	rm -rf UnleashClient.egg-info;
 
-build-package:
-	python setup.py sdist bdist_wheel
 
-upload:
-	twine upload dist/*
+# Run in Docker
+run-docker:
+	docker run -it --rm --name ${PROJECT_NAME} \
+	${PROJECT_NAME}:latest
+
+#-----------------------------------------------------------------------
+# Docker Rules
+#-----------------------------------------------------------------------
+# Build Docker image
+docker:
+	docker build -t ${PROJECT_NAME} .
+
+# Deletes Docker image
+clean-docker:
+	docker rm ${PROJECT_NAME}
