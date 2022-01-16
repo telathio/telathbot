@@ -8,6 +8,7 @@ def test_metrics_and_status():
         assert response.status_code == 200
         response = client.get("/control/environ")
         assert response.status_code == 200
+        assert len(response.json()["environ"].keys()) > 0
         response = client.get("/control/health")
         assert response.status_code == 200
         response = client.get("/control/heartbeat")

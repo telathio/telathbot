@@ -33,6 +33,8 @@ local-dev-down:
 # Run Rules
 #-----------------------------------------------------------------------
 
+run:
+	uvicorn telathbot:app --reload --host 0.0.0.0
 
 # Run in Docker
 run-docker:
