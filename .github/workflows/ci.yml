@@ -22,7 +22,7 @@ jobs:
       run: |
         poetry run mypy --install-types --non-interactive telathbot
         poetry run pylint telathbot
-        poetry run black --check telathbot tests
+        poetry run black --check --target-version py310 telathbot tests
     - name: Build local dev stack
       run: docker-compose -f tests/local_dev/docker-compose.yaml up -d
     - name: Run tests

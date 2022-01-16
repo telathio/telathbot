@@ -7,10 +7,13 @@ from telathbot.config import (  # pylint: disable=unused-import
     DockerSettings,
 )
 from telathbot.databases.mongo import initialize
+from telathbot.routers import safetytools
 
 app = fastapi_plugins.register_middleware(FastAPI())
 Instrumentator().instrument(app).expose(app)
 config = fastapi_plugins.get_config()
+
+app.include_router(safetytools.SAFETYTOOLS_ROUTER)
 
 
 @app.on_event("startup")
@@ -35,4 +38,4 @@ async def on_shutdown() -> None:
 
 @app.get("/")
 async def root():
-    return dict(config)
+    return {"Hello": "World!"}

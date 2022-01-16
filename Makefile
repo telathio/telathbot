@@ -17,11 +17,11 @@ lint:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH;
 	mypy --install-types --non-interactive ${PROJECT_NAME};
 	pylint ${PROJECT_NAME};
-	black telathbot tests;
+	black telathbot tests --target-version py310;
 
 pytest:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH && \
-	py.test tests
+	CONTROL_LEVEL=test py.test tests
 
 local-dev-up:
 	docker compose -f tests/local_dev/docker-compose.yaml up -d

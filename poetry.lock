@@ -329,7 +329,7 @@ encryption = ["pymongo[encryption] (>=3.12,<4)"]
 name = "mypy"
 version = "0.931"
 description = "Optional static typing for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -346,7 +346,7 @@ python2 = ["typed-ast (>=1.4.0,<2)"]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -690,7 +690,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "tomli"
 version = "1.2.3"
 description = "A lil' TOML parser"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -742,7 +742,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ea68bd3309d3088e722431eb8c5f3a9c52562316c9750e8524e3e63c99d6b7f7"
+content-hash = "2380a939857d06e3d840277f48910d55a9527497a979c81981e05a40572990b2"
 
 [metadata.files]
 aiojobs = [
