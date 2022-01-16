@@ -17,12 +17,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install poetry
-        isort . --check --diff
         poetry install
     - name: Linting
       run: |
         poetry run mypy --install-types --non-interactive telathbot
         poetry run pylint telathbot
+        poetry run isort . --check --diff
         poetry run black --check --target-version py310 telathbot tests
     - name: Build local dev stack
       run: docker-compose -f tests/local_dev/docker-compose.yaml up -d
