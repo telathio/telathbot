@@ -1,14 +1,12 @@
 # pylint: disable=no-name-in-module, too-few-public-methods
-from functools import lru_cache
-from pydantic import BaseSettings, AnyUrl, HttpUrl
+import logging
+import fastapi_plugins
+from pydantic import AnyUrl, HttpUrl
 
 
-@lru_cache()
-def get_settings():
-    return Settings()
+class DefaultSettings(fastapi_plugins.LoggingSettings):
+    api_name: str = str(__name__)
 
-
-class Settings(BaseSettings):
     # Xenforo
     xenforo_db_host: str
     xenforo_db_port: int = 3306
@@ -22,6 +20,23 @@ class Settings(BaseSettings):
 
     # TelathBot
     telathbot_db_url: AnyUrl
+    logging_level: int = logging.DEBUG
+    logging_style: fastapi_plugins.LoggingStyle = fastapi_plugins.LoggingStyle.logtxt
 
     class Config:
         env_file = ".env"
+
+
+@fastapi_plugins.registered_configuration_docker
+class DockerSettings(DefaultSettings):
+    pass
+
+
+@fastapi_plugins.registered_configuration_local
+class LocalSettings(DefaultSettings):
+    pass
+
+
+@fastapi_plugins.registered_configuration_test
+class TestSettings(DefaultSettings):
+    pass
