@@ -22,6 +22,12 @@ pytest:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH && \
 	py.test tests
 
+local-dev-up:
+	docker compose -f tests/local_dev/docker-compose-dev.yaml up -d
+
+local-dev-down:
+	docker compose -f tests/local_dev/docker-compose-dev.yaml down
+
 #-----------------------------------------------------------------------
 # Run Rules
 #-----------------------------------------------------------------------

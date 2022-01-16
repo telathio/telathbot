@@ -8,14 +8,21 @@ def get_settings():
 
 class Settings(BaseSettings):
     # Xenforo
-    xenforo_db_uri: AnyUrl
+    xenforo_db_host: str
+    xenforo_db_port: int = 3306
+    xenforo_db_user: str
+    xenforo_db_password: str
+    xenforo_db_name: str
     xenforo_stop_reaction_id: int
 
     # Discord
     discord_webhook: HttpUrl
 
     # TelathBot
-    telathbot_db_uri: AnyUrl
+    telathbot_db_url: AnyUrl
+    telathbot_db_username: str
+    telathbot_db_password: str
+    telathbot_db_db: str
 
     class Config:
         env_file = ".env"
