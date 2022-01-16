@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 import fastapi_plugins
 from prometheus_fastapi_instrumentator import Instrumentator
-from telathbot.config import (
+from telathbot.config import (  # pylint: disable=unused-import
     LocalSettings,
     TestSettings,
     DockerSettings,
-)  # pylint: disable=unused-import
+)
+from telathbot.databases.mongo import initialize
 
 app = fastapi_plugins.register_middleware(FastAPI())
 Instrumentator().instrument(app).expose(app)
@@ -22,6 +23,7 @@ async def on_startup() -> None:
     await fastapi_plugins.control_plugin.init()
     await fastapi_plugins.log_plugin.init_app(app, config=config)
     await fastapi_plugins.log_plugin.init()
+    await initialize(fastapi_plugins.log_plugin.logger)
 
 
 @app.on_event("shutdown")

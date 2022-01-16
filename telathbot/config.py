@@ -22,6 +22,7 @@ class DefaultSettings(fastapi_plugins.LoggingSettings):
     telathbot_db_url: AnyUrl
     logging_level: int = logging.DEBUG
     logging_style: fastapi_plugins.LoggingStyle = fastapi_plugins.LoggingStyle.logtxt
+    logging_fmt: str = "%(asctime)s - %(levelname)s - %(message)s"
 
     class Config:
         env_file = ".env"
