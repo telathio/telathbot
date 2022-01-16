@@ -24,10 +24,10 @@ pytest:
 	py.test tests
 
 local-dev-up:
-	docker compose -f tests/local_dev/docker-compose-dev.yaml up -d
+	docker compose -f tests/local_dev/docker-compose.yaml up -d
 
 local-dev-down:
-	docker compose -f tests/local_dev/docker-compose-dev.yaml down
+	docker compose -f tests/local_dev/docker-compose.yaml down
 
 #-----------------------------------------------------------------------
 # Run Rules
