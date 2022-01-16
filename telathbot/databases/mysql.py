@@ -1,6 +1,8 @@
 import json
 from typing import List
+
 import aiomysql
+
 from telathbot.config import get_settings
 from telathbot.models.reaction import PostReaction
 

@@ -1,6 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient
+
 from telathbot.config import get_settings
 from telathbot.constants import METADATA_COLLECTION, TELATHBOT_DB, VERSION
+from telathbot.logger import LOGGER
 
 
 async def initialize():
@@ -12,5 +14,6 @@ async def initialize():
         metadata = {"type": "metadata", "appVersion": VERSION, "lastPostId": 0}
 
         await metadata_collection.insert_one(metadata)
+        LOGGER.info("No metadata found.  Initializing!")
     else:
-        pass
+        LOGGER.info("Metadata found.")

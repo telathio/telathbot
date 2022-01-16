@@ -1,4 +1,5 @@
 import uvicorn
+
 from telathbot import app
 
 if __name__ == "__main__":

@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from prometheus_fastapi_instrumentator import Instrumentator
+
 from telathbot.databases.mongo import initialize
+from telathbot.logger import init_logger
 from telathbot.routers import safetytools
 
+init_logger()
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
 

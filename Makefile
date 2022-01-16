@@ -17,6 +17,7 @@ lint:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH;
 	mypy --install-types --non-interactive ${PROJECT_NAME};
 	pylint ${PROJECT_NAME};
+	isort .;
 	black telathbot tests --target-version py310;
 
 pytest:

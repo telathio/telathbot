@@ -1,5 +1,6 @@
-from telathbot import app
 from fastapi.testclient import TestClient
+
+from telathbot import app
 
 
 def test_metrics_and_status():
