@@ -17,6 +17,7 @@ lint:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH;
 	mypy --install-types --non-interactive ${PROJECT_NAME};
 	pylint ${PROJECT_NAME};
+	black telathbot tests;
 
 pytest:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH && \

@@ -1,5 +1,7 @@
+# pylint: disable=no-name-in-module, too-few-public-methods
 from functools import lru_cache
 from pydantic import BaseSettings, AnyUrl, HttpUrl
+
 
 @lru_cache()
 def get_settings():
