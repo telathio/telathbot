@@ -1,10 +1,14 @@
-# pylint: disable=no-name-in-module, too-few-public-methods
-import logging
-import fastapi_plugins
-from pydantic import AnyUrl, HttpUrl
+# pylint: disable=too-few-public-methods
+from functools import lru_cache
+from pydantic import AnyUrl, HttpUrl, BaseSettings  # pylint: disable=no-name-in-module,
 
 
-class DefaultSettings(fastapi_plugins.LoggingSettings):
+@lru_cache()
+def get_settings():
+    return Settings()
+
+
+class Settings(BaseSettings):
     api_name: str = str(__name__)
 
     # Xenforo
@@ -20,24 +24,6 @@ class DefaultSettings(fastapi_plugins.LoggingSettings):
 
     # TelathBot
     telathbot_db_url: AnyUrl
-    logging_level: int = logging.DEBUG
-    logging_style: fastapi_plugins.LoggingStyle = fastapi_plugins.LoggingStyle.logtxt
-    logging_fmt: str = "%(asctime)s - %(levelname)s - %(message)s"
 
     class Config:
         env_file = ".env"
-
-
-@fastapi_plugins.registered_configuration_docker
-class DockerSettings(DefaultSettings):
-    pass
-
-
-@fastapi_plugins.registered_configuration_local
-class LocalSettings(DefaultSettings):
-    pass
-
-
-@fastapi_plugins.registered_configuration_test
-class TestSettings(DefaultSettings):
-    pass

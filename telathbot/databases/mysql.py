@@ -1,14 +1,14 @@
 import json
 from typing import List
 import aiomysql
-from fastapi_plugins import get_config
+from telathbot.config import get_settings
 from telathbot.models.reaction import PostReaction
 
 
 async def get_post_reactions(
     start_post_id: int, reaction_id: int
 ) -> List[PostReaction]:
-    config = get_config()
+    config = get_settings()
 
     pool = await aiomysql.create_pool(
         host=config.xenforo_db_host,
