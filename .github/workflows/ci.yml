@@ -24,10 +24,10 @@ jobs:
         poetry run pylint telathbot
         poetry run isort . --check --diff
         poetry run black --check --target-version py310 telathbot tests
-    - name: Build local dev stack
-      run: docker-compose -f tests/local_dev/docker-compose.yaml up -d
     - name: Run tests
       run: |
+        docker-compose -f tests/local_dev/docker-compose.yaml up -d
+        sleep 10
         cp .env-local .env
         poetry run pytest
     # - name: "Upload coverage to Codecov"
