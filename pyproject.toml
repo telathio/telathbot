@@ -7,10 +7,13 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-SQLAlchemy = "^1.4.29"
 fastapi = "^0.71.0"
 discord-webhook = "^0.14.0"
-fastapi-plugins = "^0.9.0"
+uvicorn = "^0.17.0"
+prometheus-fastapi-instrumentator = "^5.7.1"
+motor = "^2.5.1"
+aiomysql = "^0.0.22"
+mypy = "^0.931"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -21,6 +24,11 @@ pytest-flake8 = "^1.0.7"
 pytest-dotenv = "^0.5.2"
 pytest-mock = "^3.6.1"
 pytest-html = "^3.1.1"
+black = "^21.12b0"
+isort = "^5.10.1"
+
+[tool.isort]
+profile = "black"
 
 [tool.mypy]
 strict_optional = false
@@ -41,7 +49,10 @@ log_file_level="INFO"
 
 [tool.pylint.messages_control]
 disable = [
-    "line-too-long"
+    "line-too-long",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring"
 ]
 
 [build-system]

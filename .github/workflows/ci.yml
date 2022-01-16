@@ -22,8 +22,13 @@ jobs:
       run: |
         poetry run mypy --install-types --non-interactive telathbot
         poetry run pylint telathbot
+        poetry run isort . --check --diff
+        poetry run black --check --target-version py310 telathbot tests
     - name: Run tests
       run: |
+        docker-compose -f tests/local_dev/docker-compose.yaml up -d
+        sleep 10
+        cp .env-local .env
         poetry run pytest
     # - name: "Upload coverage to Codecov"
     #   uses: codecov/codecov-action@v2
