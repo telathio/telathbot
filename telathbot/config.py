@@ -20,9 +20,6 @@ class Settings(BaseSettings):
 
     # TelathBot
     telathbot_db_url: AnyUrl
-    telathbot_db_username: str
-    telathbot_db_password: str
-    telathbot_db_db: str
 
     class Config:
         env_file = ".env"
