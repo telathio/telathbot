@@ -1,19 +1,14 @@
+import asyncio
+
+import motor.core
 from motor.motor_asyncio import AsyncIOMotorClient
+from umongo.frameworks import MotorAsyncIOInstance
 
 from telathbot.config import get_settings
-from telathbot.constants import METADATA_COLLECTION, TELATHBOT_DB, VERSION
-from telathbot.logger import LOGGER
+from telathbot.constants import TELATHBOT_DB
 
+CLIENT = AsyncIOMotorClient(get_settings().telathbot_db_url)
+CLIENT.get_io_loop = asyncio.get_running_loop
+DB = CLIENT[TELATHBOT_DB]
 
-async def initialize():
-    config = get_settings()
-    database = AsyncIOMotorClient(config.telathbot_db_url)
-    metadata_collection = database[TELATHBOT_DB][METADATA_COLLECTION]
-
-    if await metadata_collection.count_documents({}) == 0:
-        metadata = {"type": "metadata", "appVersion": VERSION, "lastPostId": 0}
-
-        await metadata_collection.insert_one(metadata)
-        LOGGER.info("No metadata found.  Initializing!")
-    else:
-        LOGGER.info("Metadata found.")
+UMONGO = MotorAsyncIOInstance(DB)

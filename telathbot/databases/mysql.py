@@ -4,7 +4,7 @@ from typing import List
 import aiomysql
 
 from telathbot.config import get_settings
-from telathbot.models.reaction import PostReaction
+from telathbot.schemas.reaction import PostReaction
 
 
 async def get_post_reactions(

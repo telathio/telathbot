@@ -130,4 +130,5 @@ dmypy.json
 
 # Custom
 .vscode
+.idea
 test_results
