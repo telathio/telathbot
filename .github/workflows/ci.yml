@@ -25,7 +25,7 @@ jobs:
         poetry run mypy --install-types --non-interactive telathbot
         poetry run pylint telathbot
         poetry run isort . --check --diff
-        poetry run black --check --target-version py310 telathbot tests
+        poetry run black --check --target-version py310 telathbot tests scripts
     - name: Run tests
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
