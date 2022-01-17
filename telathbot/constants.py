@@ -1,4 +1,4 @@
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 # Xenforo
 XENFORO_THREAD_PAGE_SIZE = 20
