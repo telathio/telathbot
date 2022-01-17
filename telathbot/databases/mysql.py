@@ -29,7 +29,8 @@ async def get_post_reactions(
                     thread_id, 
                     username, 
                     reactions, 
-                    reaction_users 
+                    reaction_users,
+                    position
                 FROM xf_post 
                 WHERE 
                     post_id > {start_post_id} AND 
@@ -50,6 +51,7 @@ async def get_post_reactions(
                 username=result[2],
                 reactions=json.loads(result[3]),
                 reaction_users=json.loads(result[4]),
+                position=result[5],
             )
         )
 

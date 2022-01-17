@@ -9,3 +9,5 @@ class PostReaction(BaseModel):
     username: str
     reactions: dict
     reaction_users: List[dict]
+    position: int
+    notified: bool = False

@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     xenforo_db_password: str
     xenforo_db_name: str
     xenforo_stop_reaction_id: int
+    xenforo_base_url: str
 
     # Discord
     discord_webhook: HttpUrl
