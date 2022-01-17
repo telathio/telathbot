@@ -46,3 +46,11 @@ jobs:
       with:
         name: test-results
         path: test_results
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: false
+        tags: cluelesshamster86/telathbot:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
