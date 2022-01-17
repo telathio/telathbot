@@ -29,6 +29,10 @@ def test_metadata_check_ip_changed():
 
 def test_metadata_check_ip_not_changed():
     with TestClient(app) as client:
+        # Reset data
+        client.post("/metadata/check/ip", json={})
+
+        # Actually test
         response = client.post("/metadata/check/ip", json={})
         assert response.status_code == 200
 

@@ -61,3 +61,10 @@ async def get_post_reactions(
         )
 
     return raw_results
+
+
+async def get_latest_post_id() -> int:
+    query = "select max(post_id) from xf_post;"
+    query_results = await _run_query(query)
+
+    return query_results[0][0]

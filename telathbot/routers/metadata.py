@@ -31,7 +31,7 @@ async def get_metadata() -> MetadataSchema:
     """
     Application metadata
     """
-    metadata = await Metadata.find_one()
+    metadata = await Metadata.find_one({"type": "metadata"})
     response = MetadataSchema(**metadata.to_mongo())
 
     return response
@@ -42,7 +42,7 @@ async def check_ip(ip: MetadataCheckIPRequest) -> MetadataCheckIPResponse:
     """
     Checks if IP is still valid.  Will send a Discord notification if not.
     """
-    metadata = await Metadata.find_one()
+    metadata = await Metadata.find_one({"type": "metadata"})
 
     if not ip.ip:
         public_ip = str(await get_ip_address())
@@ -52,7 +52,8 @@ async def check_ip(ip: MetadataCheckIPRequest) -> MetadataCheckIPResponse:
     if metadata.lastPublicIp != public_ip:
         webhook_status = send_ip_changed_notification(new_ip=public_ip)
         response = MetadataCheckIPResponse(changed=True, webhook_status=webhook_status)
-
+        metadata.update({"lastPublicIp": public_ip})
+        await metadata.commit()
     else:
         response = MetadataCheckIPResponse(changed=False, webhook_status=False)
 
