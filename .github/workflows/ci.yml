@@ -32,6 +32,11 @@ jobs:
         sleep 10
         cp .env-local .env
         poetry run pytest
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: test_results/results.xml
     - name: Send coverage to Coveralls
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

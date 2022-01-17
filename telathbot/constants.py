@@ -1,5 +1,9 @@
 VERSION = "0.1.0"
 
+# Xenforo
+XENFORO_THREAD_PAGE_SIZE = 20
+
 # Mongo
 TELATHBOT_DB = "telathbot"
 METADATA_COLLECTION = "metadata"
+SAFETYTOOLS_COLLECTION = "safetytools"

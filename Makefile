@@ -5,7 +5,9 @@ PROJECT_NAME = telathbot
 #-----------------------------------------------------------------------
 # Rules of Rules : Grouped rules that _doathing_
 #-----------------------------------------------------------------------
-test: lint pytest
+test: lint local-dev-down local-dev-up pytest
+
+run: local-dev-down local-dev-up run-local
 
 build: clean build-package upload
 
@@ -34,7 +36,7 @@ local-dev-down:
 # Run Rules
 #-----------------------------------------------------------------------
 
-run:
+run-local:
 	uvicorn telathbot:app --reload --host 0.0.0.0
 
 # Run in Docker

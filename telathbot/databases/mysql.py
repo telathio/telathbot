@@ -7,9 +7,7 @@ from telathbot.config import get_settings
 from telathbot.schemas.reaction import PostReaction
 
 
-async def get_post_reactions(
-    start_post_id: int, reaction_id: int
-) -> List[PostReaction]:
+async def _run_query(query: str):
     config = get_settings()
 
     pool = await aiomysql.create_pool(
@@ -22,24 +20,32 @@ async def get_post_reactions(
 
     async with pool.acquire() as conn:
         async with conn.cursor() as cur:
-            await cur.execute(
-                f"""
-                SELECT
-                    post_id, 
-                    thread_id, 
-                    username, 
-                    reactions, 
-                    reaction_users 
-                FROM xf_post 
-                WHERE 
-                    post_id > {start_post_id} AND 
-                    reaction_users like '%reaction_id\":{reaction_id}%';
-            """
-            )
+            await cur.execute(query)
             query_results = await cur.fetchall()
 
     pool.close()
     await pool.wait_closed()
+
+    return query_results
+
+
+async def get_post_reactions(
+    start_post_id: int, reaction_id: int
+) -> List[PostReaction]:
+    query = f"""
+        SELECT
+            post_id, 
+            thread_id, 
+            username, 
+            reactions, 
+            reaction_users,
+            position
+        FROM xf_post 
+        WHERE 
+            post_id > {start_post_id} AND 
+            reaction_users like '%reaction_id\":{reaction_id}%';
+    """
+    query_results = await _run_query(query)
 
     raw_results = []
     for result in query_results:
@@ -50,7 +56,15 @@ async def get_post_reactions(
                 username=result[2],
                 reactions=json.loads(result[3]),
                 reaction_users=json.loads(result[4]),
+                position=result[5],
             )
         )
 
     return raw_results
+
+
+async def get_latest_post_id() -> int:
+    query = "select max(post_id) from xf_post;"
+    query_results = await _run_query(query)
+
+    return query_results[0][0]
