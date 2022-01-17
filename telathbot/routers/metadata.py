@@ -1,13 +1,11 @@
-from ipaddress import ip_address
-from urllib import response
-
 from fastapi import APIRouter
 
 from telathbot.constants import VERSION
+from telathbot.discord import send_ip_changed_notification
 from telathbot.logger import LOGGER
 from telathbot.models import Metadata
 from telathbot.public_ip import get_ip_address
-from telathbot.schemas import MetadataCheckIPRequest, MetadataCheckIPResponse, responses
+from telathbot.schemas import MetadataCheckIPRequest, MetadataCheckIPResponse
 from telathbot.schemas.metadata import MetadataSchema
 
 METADATA_ROUTER = APIRouter(prefix="/metadata", tags=["metadata"])
@@ -42,13 +40,20 @@ async def get_metadata() -> MetadataSchema:
 @METADATA_ROUTER.post("/check/ip")
 async def check_ip(ip: MetadataCheckIPRequest) -> MetadataCheckIPResponse:
     """
-    Checks if IP is still valid
+    Checks if IP is still valid.  Will send a Discord notification if not.
     """
     metadata = await Metadata.find_one()
 
-    if metadata.lastPublicIp != ip.ip:
-        response = MetadataCheckIPResponse(changed=True)
+    if not ip.ip:
+        public_ip = str(await get_ip_address())
     else:
-        response = MetadataCheckIPResponse(changed=False)
+        public_ip = ip.ip
+
+    if metadata.lastPublicIp != public_ip:
+        webhook_status = send_ip_changed_notification(new_ip=public_ip)
+        response = MetadataCheckIPResponse(changed=True, webhook_status=webhook_status)
+
+    else:
+        response = MetadataCheckIPResponse(changed=False, webhook_status=False)
 
     return response

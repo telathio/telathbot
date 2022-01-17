@@ -7,3 +7,4 @@ class HealthResponse(BaseModel):
 
 class MetadataCheckIPResponse(BaseModel):
     changed: bool
+    webhook_status: bool

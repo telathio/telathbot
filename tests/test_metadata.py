@@ -15,7 +15,7 @@ def test_metadata():
         assert type(response_contents["lastPublicIp"]) == str
 
 
-def test_metadata_check_ip():
+def test_metadata_check_ip_changed():
     with TestClient(app) as client:
         request_body = {"ip": "1.1.1.1"}
 
@@ -24,3 +24,14 @@ def test_metadata_check_ip():
 
         response_contents = response.json()
         assert response_contents["changed"] == True
+        assert response_contents["webhook_status"] == True
+
+
+def test_metadata_check_ip_not_changed():
+    with TestClient(app) as client:
+        response = client.post("/metadata/check/ip", json={})
+        assert response.status_code == 200
+
+        response_contents = response.json()
+        assert response_contents["changed"] == False
+        assert response_contents["webhook_status"] == False
