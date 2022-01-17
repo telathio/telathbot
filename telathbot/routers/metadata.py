@@ -7,6 +7,7 @@ from telathbot.constants import VERSION
 from telathbot.logger import LOGGER
 from telathbot.models import Metadata
 from telathbot.public_ip import get_ip_address
+from telathbot.schemas import MetadataCheckIPRequest, MetadataCheckIPResponse, responses
 from telathbot.schemas.metadata import MetadataSchema
 
 METADATA_ROUTER = APIRouter(prefix="/metadata", tags=["metadata"])
@@ -28,11 +29,25 @@ async def initialize():
 
 
 @METADATA_ROUTER.get("/", response_model=MetadataSchema)
-async def get_safetytool_reactions() -> MetadataSchema:
+async def get_metadata() -> MetadataSchema:
     """
     Application metadata
     """
     metadata = await Metadata.find_one()
     response = MetadataSchema(**metadata.to_mongo())
+
+    return response
+
+@METADATA_ROUTER.post("/check/ip")
+async def check_ip(ip: MetadataCheckIPRequest) -> MetadataCheckIPResponse:
+    """
+    Checks if IP is still valid
+    """
+    metadata = await Metadata.find_one()
+
+    if metadata.lastPublicIp != ip.ip:
+        response = MetadataCheckIPResponse(changed=True)
+    else:
+        response = MetadataCheckIPResponse(changed=False)
 
     return response
