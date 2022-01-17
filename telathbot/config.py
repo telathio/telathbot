@@ -26,7 +26,6 @@ class Settings(BaseSettings):
 
     # TelathBot
     telathbot_db_url: AnyUrl
-    telathbot_port: int = 8000
 
     class Config:
         env_file = ".env"

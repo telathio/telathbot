@@ -42,9 +42,12 @@ async def get_safetytool_reactions(
     else:
         safetytool_uses = []
 
-    new_latest_post_id = await get_latest_post_id()
-    metadata.update({"lastPostId": new_latest_post_id})
-    await metadata.commit()
+    # Do this as close to the actual query for data validity reasons.
+    # Persist most recent post so we don't waste DB CPU cycles.
+    if persist:
+        new_latest_post_id = await get_latest_post_id()
+        metadata.update({"lastPostId": new_latest_post_id})
+        await metadata.commit()
 
     # Handle notifications and persistence.
     for use in safetytool_uses:
