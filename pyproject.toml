@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telathbot"
-version = "0.4.1"
+version = "0.4.2"
 description = "A Discord/Xenforo bot!"
 authors = ["Ivan Lee <ivanklee86@gmail.com>"]
 license = "MIT"
