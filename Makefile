@@ -16,9 +16,9 @@ build: clean build-package upload
 lint:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH;
 	mypy --install-types --non-interactive ${PROJECT_NAME};
-	pylint ${PROJECT_NAME};
 	isort .;
 	black telathbot tests --target-version py310;
+	pylint ${PROJECT_NAME};
 
 pytest:
 	export PYTHONPATH=${ROOT_DIR}:$$PYTHONPATH && \

@@ -1,12 +1,10 @@
-# type: ignore
-# Ignore until mypy fixes Py3.10 case support
 from typing import List
 
 from fastapi import APIRouter
 
 from telathbot.config import get_settings
 from telathbot.databases.mysql import get_post_reactions
-from telathbot.models.reaction import PostReaction
+from telathbot.schemas.reaction import PostReaction
 
 SAFETYTOOLS_ROUTER = APIRouter(prefix="/safetytools", tags=["safetytools"])
 

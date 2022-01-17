@@ -2,10 +2,9 @@ from fastapi import FastAPI
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from telathbot import constants
-from telathbot.databases.mongo import initialize
 from telathbot.logger import init_logger
-from telathbot.models.responses import HealthResponse
-from telathbot.routers import safetytools
+from telathbot.routers import metadata, safetytools
+from telathbot.schemas.responses import HealthResponse
 
 init_logger()
 app = FastAPI()
@@ -13,11 +12,12 @@ Instrumentator().instrument(app).expose(app)
 
 
 app.include_router(safetytools.SAFETYTOOLS_ROUTER)
+app.include_router(metadata.METADATA_ROUTER)
 
 
 @app.on_event("startup")
 async def on_startup() -> None:
-    await initialize()
+    await metadata.initialize()
 
 
 @app.get("/health")
