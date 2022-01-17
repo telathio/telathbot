@@ -38,6 +38,7 @@ async def get_metadata() -> MetadataSchema:
 
     return response
 
+
 @METADATA_ROUTER.post("/check/ip")
 async def check_ip(ip: MetadataCheckIPRequest) -> MetadataCheckIPResponse:
     """
