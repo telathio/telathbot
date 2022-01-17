@@ -21,5 +21,6 @@ def main(
         raise Exception("Error reporting on safetytools.")
     typer.echo("Everything complete, exiting!.")
 
+
 if __name__ == "__main__":
     typer.run(main)
