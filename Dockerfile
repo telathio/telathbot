@@ -34,6 +34,9 @@ ENV LANG =C.UTF-8
 # Python variables
 ENV PYTHONPATH /source
 
+# Port settings
+EXPOSE 8000
+
 # RUN
 # ---------------------------------------------------------------------- #
 
