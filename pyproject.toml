@@ -31,6 +31,7 @@ black = "^21.12b0"
 isort = "^5.10.1"
 pytest-asyncio = "^0.17.1"
 coveralls = "^3.3.1"
+bump2version = "^1.0.1"
 
 [tool.isort]
 profile = "black"
