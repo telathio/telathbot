@@ -33,3 +33,8 @@ ENV LANG =C.UTF-8
 
 # Python variables
 ENV PYTHONPATH /source
+
+# RUN
+# ---------------------------------------------------------------------- #
+
+ENTRYPOINT [ "python", "telathbot/main.py"]
