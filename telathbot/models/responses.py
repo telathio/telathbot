@@ -8,3 +8,8 @@ class HealthResponse(BaseModel):
 class AppDataCheckIPResponse(BaseModel):
     changed: bool
     webhook_status: bool
+
+
+class SafetyToolsNotifyResponse(BaseModel):
+    object_id: str
+    notified: bool

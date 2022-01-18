@@ -9,10 +9,9 @@ from telathbot.config import get_settings
 from telathbot.constants import SAFETYTOOLS_COLLECTION
 from telathbot.databases.mongo import DB
 from telathbot.databases.mysql import get_post_reactions
-
-# from telathbot.discord import send_safetytools_notification
+from telathbot.discord import send_safetytools_notification
 from telathbot.enums import SafetyToolsLevels
-from telathbot.models import SafetyToolsUse
+from telathbot.models import SafetyToolsNotifyResponse, SafetyToolsUse
 
 SAFETYTOOLS_ROUTER = APIRouter(prefix="/safetytools", tags=["safetytools"])
 
@@ -67,3 +66,43 @@ async def clear_safetytools_uses(level: SafetyToolsLevels) -> None:
         delete_filter = {}
 
     await DB[SAFETYTOOLS_COLLECTION].delete_many(delete_filter)
+
+
+@SAFETYTOOLS_ROUTER.post(
+    "/notify/{level}", response_model=List[SafetyToolsNotifyResponse]
+)
+async def notify_safetytool_uses(
+    level: SafetyToolsLevels,
+) -> List[SafetyToolsNotifyResponse]:
+    query_filter = {"notified": False}
+    if level != SafetyToolsLevels.ALL:
+        query_filter["level"] = level  # type: ignore
+
+    uses = []
+    # Grab all the documents that haven't been notified.
+    async for document in DB[SAFETYTOOLS_COLLECTION].find(query_filter):
+        uses.append(SafetyToolsUse(**document))
+
+    response = []
+    for use in uses:
+        webhook_result = send_safetytools_notification(
+            level=use.level,
+            post_id=use.post_id,
+            thread_id=use.thread_id,
+            position=use.position,
+            post_user=use.post_user,
+            reaction_users=use.reaction_users,
+        )
+
+        if webhook_result:
+            await DB[SAFETYTOOLS_COLLECTION].update_one(
+                {"_id": use.object_id}, {"$set": {"notified": True}}
+            )
+
+        response.append(
+            SafetyToolsNotifyResponse(
+                object_id=str(use.object_id), notified=webhook_result
+            )
+        )
+
+    return response
