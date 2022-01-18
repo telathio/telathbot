@@ -4,7 +4,6 @@ from typing import List
 import aiomysql
 
 from telathbot.config import get_settings
-from telathbot.schemas.reaction import PostReaction
 
 
 async def _run_query(query: str):
@@ -29,9 +28,7 @@ async def _run_query(query: str):
     return query_results
 
 
-async def get_post_reactions(
-    start_post_id: int, reaction_id: int
-) -> List[PostReaction]:
+async def get_post_reactions(reaction_id: int) -> List:
     query = f"""
         SELECT
             post_id, 
@@ -42,29 +39,6 @@ async def get_post_reactions(
             position
         FROM xf_post 
         WHERE 
-            post_id > {start_post_id} AND 
             reaction_users like '%reaction_id\":{reaction_id}%';
     """
-    query_results = await _run_query(query)
-
-    raw_results = []
-    for result in query_results:
-        raw_results.append(
-            PostReaction(
-                post_id=result[0],
-                thread_id=result[1],
-                username=result[2],
-                reactions=json.loads(result[3]),
-                reaction_users=json.loads(result[4]),
-                position=result[5],
-            )
-        )
-
-    return raw_results
-
-
-async def get_latest_post_id() -> int:
-    query = "select max(post_id) from xf_post;"
-    query_results = await _run_query(query)
-
-    return query_results[0][0]
+    return await _run_query(query)

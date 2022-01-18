@@ -5,6 +5,11 @@ class HealthResponse(BaseModel):
     version: str
 
 
-class MetadataCheckIPResponse(BaseModel):
+class AppDataCheckIPResponse(BaseModel):
     changed: bool
     webhook_status: bool
+
+
+class SafetyToolsNotifyResponse(BaseModel):
+    object_id: str
+    notified: bool

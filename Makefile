@@ -5,7 +5,7 @@ PROJECT_NAME = telathbot
 #-----------------------------------------------------------------------
 # Rules of Rules : Grouped rules that _doathing_
 #-----------------------------------------------------------------------
-test: lint local-dev-down local-dev-up pytest
+test: lint local-dev-down local-dev-up sleep pytest
 
 run: local-dev-down local-dev-up run-local
 
@@ -31,6 +31,10 @@ local-dev-up:
 
 local-dev-down:
 	docker compose -f tests/local_dev/docker-compose.yaml down
+
+.PHONY: sleep
+sleep:
+	sleep 5
 
 #-----------------------------------------------------------------------
 # Run Rules
