@@ -32,7 +32,7 @@ async def get_safetytool_uses(level: SafetyToolsLevels) -> List[SafetyToolsUse]:
     # Handle notifications and persistence.
     for use in raw_safetytool_uses:
         # Check if postId already exists.
-        if not await DB[SAFETYTOOLS_COLLECTION].count_documents({"postId": use[0]}):
+        if not await DB[SAFETYTOOLS_COLLECTION].count_documents({"post_id": use[0]}):
             reaction_users = [
                 x["username"]
                 for x in json.loads(use[4])
