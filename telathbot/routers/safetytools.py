@@ -1,89 +1,69 @@
-from datetime import datetime
+# pylint: disable=invalid-name
+import json
 from typing import List
 
 from fastapi import APIRouter
+from fastapi.encoders import jsonable_encoder
 
 from telathbot.config import get_settings
-from telathbot.constants import APPDATA_COLLECTION
+from telathbot.constants import SAFETYTOOLS_COLLECTION
 from telathbot.databases.mongo import DB
-from telathbot.databases.mysql import (
-    get_latest_post_id,
-)
 from telathbot.databases.mysql import get_post_reactions
-from telathbot.discord import send_safetytools_notification
+
+# from telathbot.discord import send_safetytools_notification
 from telathbot.enums import SafetyToolsLevels
-from telathbot.models import AppData, SafetyToolsUse
-from telathbot.schemas.reaction import PostReaction
+from telathbot.models import SafetyToolsUse
 
 SAFETYTOOLS_ROUTER = APIRouter(prefix="/safetytools", tags=["safetytools"])
 
 
-@SAFETYTOOLS_ROUTER.get("/uses/{level}", response_model=List[PostReaction])
-async def get_safetytool_reactions(
-    level: SafetyToolsLevels,
-    last_post_id: int = 0,
-    notify: bool = False,
-    persist: bool = False,
-) -> List[PostReaction]:
+@SAFETYTOOLS_ROUTER.post("/uses/{level}", response_model=List[SafetyToolsUse])
+async def get_safetytool_uses(level: SafetyToolsLevels) -> List[SafetyToolsUse]:
     """
-    Search for uses of Safety Tools usage.
+    Search for uses of Safety Tools usage and save to database.
     """
     config = get_settings()
-    scrape_time = datetime.utcnow()
-
-    query_result = await DB[APPDATA_COLLECTION].find_one({"type": "appdata"})
-    metadata = AppData(**query_result)
-
     # Run database queries
-    if last_post_id:
-        start_post_id = last_post_id
-    else:
-        start_post_id = metadata.lastPostId
-
     if level.lower() == "red":
-        safetytool_uses = await get_post_reactions(
-            start_post_id, config.xenforo_stop_reaction_id
-        )
+        raw_safetytool_uses = await get_post_reactions(config.xenforo_stop_reaction_id)
     else:
-        safetytool_uses = []
+        raw_safetytool_uses = []
 
-    # # Do this as close to the actual query for data validity reasons.
-    # # Persist most recent post so we don't waste DB CPU cycles.
-    # if persist:
-    #     new_latest_post_id = await get_latest_post_id()
-    #     metadata.update({"lastPostId": new_latest_post_id})
-    #     await metadata.commit()
-
+    safetytool_uses = []
     # Handle notifications and persistence.
-    for use in safetytool_uses:
-        reaction_users = [
-            x["username"]
-            for x in use.reaction_users
-            if x["reaction_id"] == config.xenforo_stop_reaction_id
-        ]
+    for use in raw_safetytool_uses:
+        # Check if postId already exists.
+        if not await DB[SAFETYTOOLS_COLLECTION].count_documents({"postId": use[0]}):
+            reaction_users = [
+                x["username"]
+                for x in json.loads(use[4])
+                if x["reaction_id"] == config.xenforo_stop_reaction_id
+            ]
 
-        if notify:
-            webhook_sent = send_safetytools_notification(
-                level=SafetyToolsLevels.RED,
-                post_id=use.post_id,
-                thread_id=use.thread_id,
-                position=use.position,
-                post_user=use.username,
+            # Mappings from database query.
+            new_safetool_use = SafetyToolsUse(
+                level=level,
+                post_id=use[0],
+                thread_id=use[1],
+                post_user=use[2],
                 reaction_users=reaction_users,
-            )
-        else:
-            webhook_sent = False
-
-        if persist:
-            safetools_usage_record = SafetyToolsUse(
-                postId=use.post_id,
-                threadId=use.thread_id,
-                postUser=use.username,
-                reactionUsers=", ".join(reaction_users),
-                notified=webhook_sent,
-                dateObserved=scrape_time,
+                position=use[5],
             )
 
-            await safetools_usage_record.commit()
+            insert_result = await DB[SAFETYTOOLS_COLLECTION].insert_one(
+                jsonable_encoder(new_safetool_use.dict())
+            )
+            new_safetool_use.object_id = insert_result.inserted_id
+            safetytool_uses.append(new_safetool_use)
 
     return safetytool_uses
+
+
+@SAFETYTOOLS_ROUTER.delete("/uses/{level}")
+async def clear_safetytools_uses(level: SafetyToolsLevels) -> None:
+    if level != SafetyToolsLevels.ALL:
+        delete_filter = {"level": level}
+    else:
+        delete_filter = {}
+
+    await DB[SAFETYTOOLS_COLLECTION].delete_many(delete_filter)

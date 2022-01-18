@@ -10,7 +10,6 @@ def test_appdata():
 
         response_contents = response.json()
         assert response_contents["type"] == "appdata"
-        assert type(response_contents["lastPostId"]) == int
         assert response_contents["lastPublicIp"]
         assert type(response_contents["lastPublicIp"]) == str
 

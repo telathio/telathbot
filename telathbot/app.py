@@ -3,8 +3,8 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from telathbot import constants
 from telathbot.logger import init_logger
+from telathbot.models import HealthResponse
 from telathbot.routers import appdata, safetytools
-from telathbot.schemas.responses import HealthResponse
 
 init_logger()
 app = FastAPI()

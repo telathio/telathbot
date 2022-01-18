@@ -15,7 +15,6 @@ class AppData(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id")
     type: str
     appVersion: str
-    lastPostId: int
     lastPublicIp: IPvAnyAddress
 
     class Config:

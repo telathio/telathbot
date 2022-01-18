@@ -1,17 +1,25 @@
-from umongo import Document, fields
+# pylint: disable=too-few-public-methods
+from datetime import datetime
+from typing import Optional
 
-from telathbot.constants import SAFETYTOOLS_COLLECTION
-from telathbot.databases.mongo import UMONGO
+from bson import ObjectId
+from pydantic import BaseModel, Field  # pylint: disable=no-name-in-module
+
+from telathbot.enums import SafetyToolsLevels
+from telathbot.models.validators import PyObjectId
 
 
-@UMONGO.register
-class SafetyToolsUse(Document):  # pylint: disable=abstract-method
-    class Meta:
-        collection_name = SAFETYTOOLS_COLLECTION
+class SafetyToolsUse(BaseModel):
+    object_id: Optional[PyObjectId] = Field(alias="_id")
+    level: SafetyToolsLevels
+    post_id: int
+    thread_id: int
+    post_user: str
+    reaction_users: list[str]
+    position: int
+    notified: bool = False
+    date_observed: datetime = datetime.utcnow()
 
-    postId = fields.IntegerField()
-    threadId = fields.IntegerField()
-    postUser = fields.StrField()
-    reactionUsers = fields.StrField()
-    notified = fields.BooleanField()
-    dateObserved = fields.DateTimeField()
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
