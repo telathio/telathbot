@@ -1,14 +1,18 @@
-from curses import meta
 from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter
 
 from telathbot.config import get_settings
-from telathbot.databases.mysql import get_latest_post_id, get_post_reactions
+from telathbot.constants import APPDATA_COLLECTION
+from telathbot.databases.mongo import DB
+from telathbot.databases.mysql import (
+    get_latest_post_id,
+)
+from telathbot.databases.mysql import get_post_reactions
 from telathbot.discord import send_safetytools_notification
 from telathbot.enums import SafetyToolsLevels
-from telathbot.models import Metadata, SafetyToolsUse
+from telathbot.models import AppData, SafetyToolsUse
 from telathbot.schemas.reaction import PostReaction
 
 SAFETYTOOLS_ROUTER = APIRouter(prefix="/safetytools", tags=["safetytools"])
@@ -27,7 +31,8 @@ async def get_safetytool_reactions(
     config = get_settings()
     scrape_time = datetime.utcnow()
 
-    metadata = await Metadata.find_one({"type": "metadata"})
+    query_result = await DB[APPDATA_COLLECTION].find_one({"type": "appdata"})
+    metadata = AppData(**query_result)
 
     # Run database queries
     if last_post_id:
@@ -42,12 +47,12 @@ async def get_safetytool_reactions(
     else:
         safetytool_uses = []
 
-    # Do this as close to the actual query for data validity reasons.
-    # Persist most recent post so we don't waste DB CPU cycles.
-    if persist:
-        new_latest_post_id = await get_latest_post_id()
-        metadata.update({"lastPostId": new_latest_post_id})
-        await metadata.commit()
+    # # Do this as close to the actual query for data validity reasons.
+    # # Persist most recent post so we don't waste DB CPU cycles.
+    # if persist:
+    #     new_latest_post_id = await get_latest_post_id()
+    #     metadata.update({"lastPostId": new_latest_post_id})
+    #     await metadata.commit()
 
     # Handle notifications and persistence.
     for use in safetytool_uses:

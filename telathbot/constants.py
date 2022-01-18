@@ -5,5 +5,5 @@ XENFORO_THREAD_PAGE_SIZE = 20
 
 # Mongo
 TELATHBOT_DB = "telathbot"
-METADATA_COLLECTION = "metadata"
+APPDATA_COLLECTION = "appdata"
 SAFETYTOOLS_COLLECTION = "safetytools"

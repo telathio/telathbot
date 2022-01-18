@@ -8,10 +8,10 @@ from pydantic import (  # pylint: disable=no-name-in-module
     IPvAnyAddress,
 )
 
-from telathbot.schemas.validators import PyObjectId
+from telathbot.models.validators import PyObjectId
 
 
-class MetadataSchema(BaseModel):
+class AppData(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id")
     type: str
     appVersion: str

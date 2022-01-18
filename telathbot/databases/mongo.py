@@ -1,6 +1,5 @@
 import asyncio
 
-import motor.core
 from motor.motor_asyncio import AsyncIOMotorClient
 from umongo.frameworks import MotorAsyncIOInstance
 
