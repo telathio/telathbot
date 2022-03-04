@@ -178,7 +178,7 @@ yaml = ["PyYAML (>=3.10)"]
 
 [[package]]
 name = "discord-webhook"
-version = "0.14.0"
+version = "0.15.0"
 description = "execute discord webhooks"
 category = "main"
 optional = false
@@ -808,7 +808,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1b293b9658802e3a7c6f1b92f5995791fb43a912658fae17a2bf158d63a3f1b3"
+content-hash = "9ca470f78e7fad10a464310ee44c4a4bf1e69eb5122741409bfddf304c13cd1c"
 
 [metadata.files]
 aiomysql = [
@@ -913,8 +913,8 @@ coveralls = [
     {file = "coveralls-3.3.1.tar.gz", hash = "sha256:b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea"},
 ]
 discord-webhook = [
-    {file = "discord-webhook-0.14.0.tar.gz", hash = "sha256:f3d660df572caaa9c2621edd7e8634a70d6d8295ce9256c365838312457069a1"},
-    {file = "discord_webhook-0.14.0-py3-none-any.whl", hash = "sha256:17e475d8a52fe0bfa26b071925f55087600e9bb96e821b611dc463f4b4998c89"},
+    {file = "discord-webhook-0.15.0.tar.gz", hash = "sha256:1557a3a86ec556d5fceeff3d0c8601affd83770280b7358a3c7f4fb7c8ee32e5"},
+    {file = "discord_webhook-0.15.0-py3-none-any.whl", hash = "sha256:5c59e3c5b52be8d9273aebdc5647f564a3c24ce4f75635fd1d9e4d9d8dad30f4"},
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
