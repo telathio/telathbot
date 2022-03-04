@@ -30,7 +30,7 @@ pytest-mock = "^3.6.1"
 pytest-html = "^3.1.1"
 black = "^21.12b0"
 isort = "^5.10.1"
-pytest-asyncio = "^0.17.1"
+pytest-asyncio = "^0.18.0"
 coveralls = "^3.3.1"
 bump2version = "^1.0.1"
 
