@@ -16,7 +16,7 @@ aiomysql = "^0.0.22"
 mypy = "^0.931"
 httpx = "^0.22.0"
 umongo = "^3.1.0"
-python-dotenv = "^0.19.2"
+python-dotenv = "^0.21.0"
 typer = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
